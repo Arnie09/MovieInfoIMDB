@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "939963483104",
+    "firebase_url": "https://imdbmovieinfoandmovienotesapp.firebaseio.com",
+    "project_id": "imdbmovieinfoandmovienotesapp",
+    "storage_bucket": "imdbmovieinfoandmovienotesapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939963483104:android:e81bf8d64095a701",
+        "android_client_info": {
+          "package_name": "com.example.arnab.movieinfoimdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939963483104-64bumcah5sd3p4n20vj4uenfuem6fjtn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9lm9ZBOtR14B05OHzecVqJbkGpuCbQCw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SearchActivity"
+android:background="@drawable/bg"
+
+    >
+
+
+<EditText
+    android:id="@+id/InputBox"
+    android:layout_width="0dp"
+    android:layout_height="57dp"
+    android:layout_marginStart="50dp"
+    android:layout_marginTop="50dp"
+    android:layout_marginEnd="50dp"
+    android:layout_marginBottom="21dp"
+    android:alpha="0.80"
+    android:background="@drawable/rounded_edittext"
+    android:ems="10"
+    android:inputType="textPersonName"
+    android:paddingLeft="10dp"
+    android:text="Name of movie/tv series"
+    app:layout_constraintBottom_toTopOf="@+id/SearchButton"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<Button
+    android:id="@+id/SearchButton"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    android:layout_marginStart="50dp"
+    android:layout_marginTop="28dp"
+    android:layout_marginEnd="286dp"
+    android:onClick="searchFunction"
+    android:text="Search"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/InputBox" />
+
+<LinearLayout
+    android:id="@+id/linearLayout2"
+    android:layout_width="87dp"
+    android:layout_height="336dp"
+    android:layout_marginStart="50dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/SearchButton"
+    app:layout_constraintVertical_bias="0.49">
+
+    <TextView
+        android:id="@+id/MovieTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="bottom|left"
+        android:text=""
+
+        android:textColor="#5C1E18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/RatingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="bottom|left"
+        android:text=""
+        android:textColor="#5C1E18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/GenreTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="bottom|left"
+        android:text=""
+        android:textColor="#5C1E18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/DirectorTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="bottom|left"
+        android:text=""
+        android:textColor="#5C1E18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/SynopsisTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="bottom|left"
+        android:text=""
+        android:textColor="#5C1E18"
+        android:textStyle="bold" />
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/linearLayout"
+    android:layout_width="150dp"
+    android:layout_height="333dp"
+    android:layout_marginStart="17dp"
+    android:layout_marginTop="81dp"
+    android:layout_marginEnd="50dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+    app:layout_constraintTop_toBottomOf="@+id/InputBox">
+
+    <TextView
+        android:id="@+id/MovieNameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom|left"
+        android:textColor="#5C1E18" />
+
+    <TextView
+        android:id="@+id/MovieRatingView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom|left"
+        android:textColor="#5C1E18" />
+
+    <TextView
+        android:id="@+id/MovieGenreView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom|left"
+        android:textColor="#5C1E18" />
+
+    <TextView
+        android:id="@+id/MovieDirectorView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom|left"
+        android:textColor="#5C1E18" />
+
+    <TextView
+        android:id="@+id/SynopsisView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:width="2dip"
+        android:color="#7A180D"
+        android:gravity="top|left"
+        android:textColor="#5C1E18" />
+
+
+</LinearLayout>
+
+    <Button
+        android:id="@+id/BackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="24dp"
+        android:onClick="backButtonFunction"
+        android:text="BackButton"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.703"
+        app:layout_constraintStart_toEndOf="@+id/SearchButton"
+        app:layout_constraintTop_toBottomOf="@+id/InputBox"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>

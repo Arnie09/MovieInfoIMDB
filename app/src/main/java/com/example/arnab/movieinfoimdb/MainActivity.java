@@ -1,13 +1,25 @@
 package com.example.arnab.movieinfoimdb;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -19,132 +31,86 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String url ="";
-    TextView searchContent;
-    TextView RatingBox;
-    TextView MovieNameBox;
-    TextView MovieGenreBox;
-    TextView MovieSynopsis;
-    TextView MovieDirector;
+    private Button signUpButton;
+    private EditText emailTextView;
+    private EditText passwordTextView;
+    private TextView signInTextView;
 
-    TextView MovieNameHeader;
-    TextView MovieRatingHeader;
-    TextView MovieGenreHeader;
-    TextView MovieDirectorHeader;
-    TextView MovieSynopsisHeader;
+    private ProgressDialog progressDialog;
 
-    public void searchFunction(View view) throws ExecutionException, InterruptedException {
-        searchContent = findViewById(R.id.InputBox);
-        String search = searchContent.getText().toString();
-        if (search.equals("Name of movie/tv series") || (search.equals(""))){
-            Toast.makeText(this, "Please enter the name of the movie to be searched!!!", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            String url1 = "https://www.google.co.in/search?&q=";
-            String url2 = "&ie=UTF-8&oe=UTF-8";
-            url = url1 + search + "+imdb" + url2;
-            Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
-            new GoogleSearch().execute();
-        }
-
-    }
+    private FirebaseAuth firebaseAuthenticator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RatingBox = (TextView)findViewById(R.id.MovieRatingView);
-        MovieNameBox = (TextView) findViewById(R.id.MovieNameView);
-        MovieGenreBox = (TextView) findViewById(R.id.MovieGenreView);
-        MovieSynopsis = (TextView) findViewById(R.id.SynopsisView);
-        MovieDirector = (TextView) findViewById(R.id.MovieDirectorView);
-        MovieNameHeader = findViewById(R.id.MovieTitle);
-        MovieRatingHeader = findViewById(R.id.RatingTitle);
-        MovieGenreHeader = findViewById(R.id.GenreTitle);
-        MovieDirectorHeader = findViewById(R.id.DirectorTitle);
-        MovieSynopsisHeader = findViewById(R.id.SynopsisTitle);
+
+        signUpButton = findViewById(R.id.SignUpButton);
+        emailTextView = findViewById(R.id.TextViewEmail);
+        passwordTextView = findViewById(R.id.TextViewPassword);
+        signInTextView = findViewById(R.id.SigninLink);
+        firebaseAuthenticator = FirebaseAuth.getInstance();
+
+        signUpButton.setOnClickListener(this);
+        signInTextView.setOnClickListener(this);
+
+        progressDialog = new ProgressDialog(this);
+        if(firebaseAuthenticator.getCurrentUser()!=null){
+            finish();
+            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+        }
     }
 
-    public class GoogleSearch extends AsyncTask <Void, Void, Void>{
-        String words ="";
-        String info = "";
-        String Genre = "";
+    @Override
+    public void onClick(View view) {
+        if (view == signUpButton){
+            //SignUp Procedure!
+            registerUser();
+        }
+        else if(view == signInTextView){
+            //SignInProcedure!
+            finish();
+            startActivity(new Intent(getApplicationContext(),LogInActivity.class));
+        }
+    }
 
+    private void registerUser() {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                    org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
-                    words =  doc.text();
-                    Pattern url_pattern = Pattern.compile("https://www.imdb.com/title/(.*?)/");
-                    Matcher url_matcher = url_pattern.matcher(words);
-                    ArrayList<String> ListOfUrls = new ArrayList<>();
-                    while(url_matcher.find()){
-                        ListOfUrls.add(url_matcher.group());
-                    }
-                    if(ListOfUrls.size()>0) {
+        String email = emailTextView.getText().toString().trim();
+        String password = passwordTextView.getText().toString().trim();
 
-                        MovieNameHeader.setText("NAME :");
-                        MovieRatingHeader.setText("RATING :");
-                        MovieGenreHeader.setText("GENRE :");
-                        MovieDirectorHeader.setText("DIRECTOR :");
-                        MovieSynopsisHeader.setText("SYNOPSIS :");
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this, "Please enter a valid email!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please enter a valid password", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+            progressDialog.setMessage("Registering.Wait up!");
+            progressDialog.show();
 
-                        String imdbUrl = ListOfUrls.get(0);
-                        Log.i("UrlOfMovie", imdbUrl);
-                        String Doc2 = Jsoup.connect(imdbUrl).get().html();
-                        org.jsoup.nodes.Document Doc3 = Jsoup.parse(Doc2);//parses the html document
-
-                        //To get rating of Movie
-                        Elements rating = ((org.jsoup.nodes.Document) Doc3).select("div.imdbRating span");
-                        RatingBox.setText(rating.get(0).text());
-
-                        //To get Name of Movie
-                        Elements names = Doc3.select("div.title_wrapper h1");
-                        MovieNameBox.setText(names.get(0).text());
-
-                        //To get Genre
-                        Elements genre = Doc3.select("div.subtext a");
-                        int n = genre.size();
-                        for (int i = 0; i < n - 1; i++) {
-                            if (i != n - 2) {
-                                Genre += genre.get(i).text() + ",";
-                            } else
-                                Genre += genre.get(i).text();
+            firebaseAuthenticator.createUserWithEmailAndPassword(email,password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
+                            if(task.isSuccessful()){
+                                Toast.makeText(MainActivity.this, "User Registration Successful!", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this, "Sorry Registration unsuccessful!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        MovieGenreBox.setText(Genre);
-
-                        Elements Director = Doc3.select("div.plot_summary_wrapper div.plot_summary div.credit_summary_item a[href]");
-                        MovieDirector.setText(Director.get(0).text());
-
-                        Elements Synopsis = Doc3.select("div.plot_summary  div.summary_text");
-                        MovieSynopsis.setText(Synopsis.get(0).text());
-                        Log.i("Synopsis", Synopsis.get(0).text());
-                    }
-                    else{
-                        Toast.makeText(MainActivity.this, "The Data you searched for was not a movie or Tv Series!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    /*Pattern rating = Pattern.compile("<span itemprop=\"ratingValue\">(.*?)</span>");
-                    Matcher matchedRating =  rating.matcher(Doc2);
-                    while(matchedRating.find()){
-                        RatingBox.setText(matchedRating.group(1));
-                    }*/
+                    });
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
     }
+
+
 }

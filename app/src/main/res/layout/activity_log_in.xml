@@ -4,23 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".LogInActivity"
     android:background="@drawable/appbcndlogin"
     android:alpha="0.90"
-
     >
 
 
     <EditText
         android:id="@+id/TextViewEmail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="18dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="Enter Email ID"
+        android:text="Enter Email"
         android:textColor="#EAE7E7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,20 +34,20 @@
         android:layout_marginEnd="18dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="Enter Password"
         android:textColor="#EAE7E7"
+        android:text="Enter password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextViewEmail" />
 
     <Button
-        android:id="@+id/SignUpButton"
+        android:id="@+id/SignInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="147dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="149dp"
-        android:text="Sign Up!"
+        android:text="Log In!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextViewPassword" />
@@ -61,8 +60,7 @@
         android:layout_marginTop="140dp"
         android:layout_marginEnd="100dp"
         android:fontFamily="cursive"
-        android:text="Sign Up to continue!"
-        android:textAllCaps="false"
+        android:text="Sign In to continue!"
         android:textColor="#EAE7E7"
         android:textSize="35sp"
         android:textStyle="bold"
@@ -71,16 +69,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/SigninLink"
+        android:id="@+id/SignUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="134dp"
-        android:textColor="#EAE7E7"
         android:clickable="true"
-        android:text="Aldready have an account? Sign in instead!"
+        android:text="Dont have an account?Sign up instead!"
+        android:textColor="#EAE7E7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
