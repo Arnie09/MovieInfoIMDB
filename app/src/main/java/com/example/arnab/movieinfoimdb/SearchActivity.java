@@ -7,6 +7,7 @@ import android.os.AsyncTask;
         import android.util.Log;
         import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
         import android.widget.Toast;
 
@@ -35,6 +36,8 @@ public class SearchActivity extends AppCompatActivity {
     TextView MovieDirectorHeader;
     TextView MovieSynopsisHeader;
     Button backButton;
+    LinearLayout layout_one;
+    LinearLayout layout_two;
 
     public void searchFunction(View view) throws ExecutionException, InterruptedException {
         searchContent = findViewById(R.id.InputBox);
@@ -68,6 +71,10 @@ public class SearchActivity extends AppCompatActivity {
         MovieDirectorHeader = findViewById(R.id.DirectorTitle);
         MovieSynopsisHeader = findViewById(R.id.SynopsisTitle);
         backButton = findViewById(R.id.BackButton);
+        layout_one = findViewById(R.id.linearLayout);
+        layout_one.setVisibility(View.INVISIBLE);
+        layout_two = findViewById(R.id.linearLayout2);
+        layout_two.setVisibility(View.INVISIBLE);
     }
 
     public void backButtonFunction(View view){
@@ -79,6 +86,10 @@ public class SearchActivity extends AppCompatActivity {
         String words ="";
         String info = "";
         String Genre = "";
+        String name = "";
+        String rating_movie = "";
+        String synopsis = "";
+        String director  = "";
 
 
         @Override
@@ -92,14 +103,13 @@ public class SearchActivity extends AppCompatActivity {
                 while(url_matcher.find()){
                     ListOfUrls.add(url_matcher.group());
                 }
+
+                int length_of_array_list = ListOfUrls.size();
+                for(int i = 0;i < length_of_array_list;i++){
+                    Log.i("The urls of imdb scrapped are : ", ListOfUrls.get(i));
+                }
+
                 if(ListOfUrls.size()>0) {
-
-                    MovieNameHeader.setText("NAME :");
-                    MovieRatingHeader.setText("RATING :");
-                    MovieGenreHeader.setText("GENRE :");
-                    MovieDirectorHeader.setText("DIRECTOR :");
-                    MovieSynopsisHeader.setText("SYNOPSIS :");
-
 
                     String imdbUrl = ListOfUrls.get(0);
                     Log.i("UrlOfMovie", imdbUrl);
@@ -107,15 +117,15 @@ public class SearchActivity extends AppCompatActivity {
                     org.jsoup.nodes.Document Doc3 = Jsoup.parse(Doc2);//parses the html document
 
                     //To get rating of Movie
-                    Elements rating = ((org.jsoup.nodes.Document) Doc3).select("div.imdbRating span");
-                    RatingBox.setText(rating.get(0).text());
+                    final Elements rating = ((org.jsoup.nodes.Document) Doc3).select("div.imdbRating span");
+                    rating_movie = rating.get(0).text();
 
                     //To get Name of Movie
                     Elements names = Doc3.select("div.title_wrapper h1");
-                    MovieNameBox.setText(names.get(0).text());
+                    name = names.get(0).text();
 
                     //To get Genre
-                    Elements genre = Doc3.select("div.subtext a");
+                    final Elements genre = Doc3.select("div.subtext a");
                     int n = genre.size();
                     for (int i = 0; i < n - 1; i++) {
                         if (i != n - 2) {
@@ -123,14 +133,32 @@ public class SearchActivity extends AppCompatActivity {
                         } else
                             Genre += genre.get(i).text();
                     }
-                    MovieGenreBox.setText(Genre);
+
 
                     Elements Director = Doc3.select("div.plot_summary_wrapper div.plot_summary div.credit_summary_item a[href]");
-                    MovieDirector.setText(Director.get(0).text());
+                    director = Director.get(0).text();
 
                     Elements Synopsis = Doc3.select("div.plot_summary  div.summary_text");
-                    MovieSynopsis.setText(Synopsis.get(0).text());
-                    Log.i("Synopsis", Synopsis.get(0).text());
+                    synopsis = Synopsis.get(0).text();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            layout_one.setVisibility(View.VISIBLE);
+                            layout_two.setVisibility(View.VISIBLE);
+                            MovieNameHeader.setText("NAME :");
+                            MovieRatingHeader.setText("RATING :");
+                            MovieGenreHeader.setText("GENRE :");
+                            MovieDirectorHeader.setText("DIRECTOR :");
+                            MovieSynopsisHeader.setText("SYNOPSIS :");
+                            MovieDirector.setText(director);
+                            MovieNameBox.setText(name);
+                            MovieSynopsis.setText(synopsis);
+                            RatingBox.setText(rating_movie);
+                            MovieGenreBox.setText(Genre);
+                        }
+                    });
+
                 }
                 else{
                     Toast.makeText(SearchActivity.this, "The Data you searched for was not a movie or Tv Series!", Toast.LENGTH_SHORT).show();
