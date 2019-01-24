@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -100,8 +101,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             progressDialog.dismiss();
                             if(task.isSuccessful()){
                                 Toast.makeText(MainActivity.this, "User Registration Successful!", Toast.LENGTH_SHORT).show();
-                                finish();
-                                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+
+                                FirebaseUser user = firebaseAuthenticator.getCurrentUser();
+                                ((FirebaseUser) user).sendEmailVerification()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                finish();
+                                                startActivity(new Intent(getApplicationContext(),LogInActivity.class));
+                                            }
+                                        });
+
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Sorry Registration unsuccessful!", Toast.LENGTH_SHORT).show();

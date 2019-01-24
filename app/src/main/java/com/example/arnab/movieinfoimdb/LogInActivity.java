@@ -43,7 +43,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         signUpTextView.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
-        if(firebaseAuthenticator.getCurrentUser()!=null){
+        if(firebaseAuthenticator.getCurrentUser()!=null && firebaseAuthenticator.getCurrentUser().isEmailVerified()== true){
             finish();
             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
         }
@@ -85,9 +85,16 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if(task.isSuccessful()){
-                            Toast.makeText(LogInActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                            //Toast.makeText(LogInActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+
+                            firebaseAuthenticator.getCurrentUser().reload();
+                            if(firebaseAuthenticator.getCurrentUser().isEmailVerified()) {
+                                finish();
+                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            }
+                            else{
+                                Toast.makeText(LogInActivity.this, "Please check email and verify sign up!", Toast.LENGTH_LONG).show();
+                            }
                         }
                         else{
                             Toast.makeText(LogInActivity.this, "Login unsuccessful!", Toast.LENGTH_SHORT).show();
