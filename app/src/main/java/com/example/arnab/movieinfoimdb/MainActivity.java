@@ -17,10 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -28,6 +33,8 @@ import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText emailTextView;
     private EditText passwordTextView;
     private TextView signInTextView;
+    private EditText nameTextView;
 
     private ProgressDialog progressDialog;
 
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         emailTextView = findViewById(R.id.TextViewEmail);
         passwordTextView = findViewById(R.id.TextViewPassword);
         signInTextView = findViewById(R.id.SigninLink);
+        nameTextView = findViewById(R.id.NameInput);
         firebaseAuthenticator = FirebaseAuth.getInstance();
 
         signUpButton.setOnClickListener(this);
@@ -79,8 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void registerUser() {
 
-        String email = emailTextView.getText().toString().trim();
+        final String email = emailTextView.getText().toString().trim();
         String password = passwordTextView.getText().toString().trim();
+        final String name = nameTextView.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Please enter a valid email!", Toast.LENGTH_SHORT).show();
@@ -88,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter a valid password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "Please enter a valid name", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -102,13 +116,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if(task.isSuccessful()){
                                 Toast.makeText(MainActivity.this, "User Registration Successful!", Toast.LENGTH_SHORT).show();
 
-                                FirebaseUser user = firebaseAuthenticator.getCurrentUser();
+                                final FirebaseUser user = firebaseAuthenticator.getCurrentUser();
                                 ((FirebaseUser) user).sendEmailVerification()
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 finish();
-                                                startActivity(new Intent(getApplicationContext(),LogInActivity.class));
+                                                FirebaseFirestore uDb = FirebaseFirestore.getInstance();
+                                                String userID = user.getUid();
+                                                Map<String,Object> initial_data = new HashMap<String, Object>();
+                                                initial_data.put("Email", email);
+                                                initial_data.put("Name",name);
+                                                //initial_data.put("UserID",userID);
+                                                uDb.collection("UserDatabase").document(userID)
+                                                        .set(initial_data)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d("cndrika", "DocumentSnapshot successfully written!");
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.w("chndrika", "Error writing document", e);
+                                                            }
+                                                        });
+
+                                                                startActivity(new Intent(getApplicationContext(), LogInActivity.class));
                                             }
                                         });
 
