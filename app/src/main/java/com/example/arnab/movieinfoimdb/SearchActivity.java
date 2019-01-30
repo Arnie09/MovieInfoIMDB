@@ -11,12 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
         import android.widget.Toast;
 
-        import org.jsoup.Jsoup;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jsoup.Jsoup;
         import org.jsoup.select.Elements;
 
         import java.io.IOException;
         import java.util.ArrayList;
-        import java.util.concurrent.ExecutionException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
         import java.util.regex.Matcher;
         import java.util.regex.Pattern;
 
@@ -39,6 +46,20 @@ public class SearchActivity extends AppCompatActivity {
     LinearLayout layout_one;
     LinearLayout layout_two;
 
+    String words ="";
+    String info = "";
+    String Genre = "";
+    String name = "";
+    String rating_movie = "";
+    String synopsis = "";
+    String director  = "";
+
+    FirebaseAuth firebaseauthenticator;
+    FirebaseUser user;
+    FirebaseFirestore db;
+    String User_ID;
+    Map<String,Object> movie_data = new HashMap<>();
+
     public void searchFunction(View view) throws ExecutionException, InterruptedException {
         searchContent = findViewById(R.id.InputBox);
         String search = searchContent.getText().toString();
@@ -49,7 +70,7 @@ public class SearchActivity extends AppCompatActivity {
             String url1 = "https://www.google.co.in/search?&q=";
             String url2 = "&ie=UTF-8&oe=UTF-8";
             url = url1 + search + "+imdb" + url2;
-            Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
             new GoogleSearch().execute();
         }
 
@@ -75,6 +96,11 @@ public class SearchActivity extends AppCompatActivity {
         layout_one.setVisibility(View.INVISIBLE);
         layout_two = findViewById(R.id.linearLayout2);
         layout_two.setVisibility(View.INVISIBLE);
+
+        firebaseauthenticator = FirebaseAuth.getInstance();
+        user = firebaseauthenticator.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        User_ID = user.getUid();
     }
 
     public void backButtonFunction(View view){
@@ -82,14 +108,37 @@ public class SearchActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
     }
 
+    public void favouriteFunction(View view){
+        if(movie_data.isEmpty()){
+            return;
+        }
+        db.collection("UserFavourites").document(User_ID).collection("Favourites").document(name)
+                .set(movie_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(SearchActivity.this, "Added to favourites!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void toWatch(View view){
+        if(movie_data.isEmpty()){
+            return;
+        }
+        db.collection("UserToWatchList").document(User_ID).collection("ToWatch").document(name)
+                .set(movie_data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(SearchActivity.this, "Added to favourites!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
     public class GoogleSearch extends AsyncTask<Void, Void, Void> {
-        String words ="";
-        String info = "";
-        String Genre = "";
-        String name = "";
-        String rating_movie = "";
-        String synopsis = "";
-        String director  = "";
+
 
 
         @Override
@@ -156,6 +205,8 @@ public class SearchActivity extends AppCompatActivity {
                             MovieSynopsis.setText(synopsis);
                             RatingBox.setText(rating_movie);
                             MovieGenreBox.setText(Genre);
+
+                            new AddtoHistory().execute();
                         }
                     });
 
@@ -173,4 +224,28 @@ public class SearchActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
         }
     }
+
+    public class AddtoHistory extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            movie_data.put("Name",name);
+            movie_data.put("Rating",rating_movie);
+            movie_data.put("Genre",Genre);
+            movie_data.put("Director",director);
+            movie_data.put("Synopsis",synopsis);
+
+            db.collection("UserHistory").document(User_ID).collection("History").document(name)
+                    .set(movie_data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(SearchActivity.this, "Added to history!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            return null;
+        }
+    }
+
 }
