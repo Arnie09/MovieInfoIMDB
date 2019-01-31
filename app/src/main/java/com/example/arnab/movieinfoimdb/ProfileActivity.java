@@ -75,6 +75,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     public void favouritesMethod(View view){
-
+        startActivity(new Intent(getApplicationContext(),FavouriteActivity.class));
     }
 }
