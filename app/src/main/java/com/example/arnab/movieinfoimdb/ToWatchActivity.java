@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FavouriteActivity extends AppCompatActivity {
+public class ToWatchActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseauthenticator;
     FirebaseUser user;
@@ -46,13 +45,13 @@ public class FavouriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourite);
+        setContentView(R.layout.activity_to_watch);
 
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
         user_id = user.getUid();
         db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("UserFavourites").document(user_id).collection("Favourites");
+        collectionReference = db.collection("UserToWatchList").document(user_id).collection("ToWatch");
 
         collectionReference
                 .get()
@@ -67,14 +66,14 @@ public class FavouriteActivity extends AppCompatActivity {
                             }
                             ListView movie_history = findViewById(R.id.MovieListView);
                             movie_history.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FavouriteActivity.this,android.R.layout.simple_list_item_1,MovieNames);
+                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ToWatchActivity.this,android.R.layout.simple_list_item_1,MovieNames);
                             movie_history.setAdapter(arrayAdapter);
                             movie_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     String selected = MovieInfo.get(MovieNames.get(position)).toString();
                                     selected = selected.substring(1,selected.length()-1);
-                                    new AlertDialog.Builder(FavouriteActivity.this)
+                                    new AlertDialog.Builder(ToWatchActivity.this)
                                             .setIcon(android.R.drawable.sym_def_app_icon)
                                             .setTitle("Information")
                                             .setMessage(selected)
@@ -100,7 +99,7 @@ public class FavouriteActivity extends AppCompatActivity {
                             });
                         } else {
                             //Log.i("Chandrika", "Error getting documents: ", task.getException());
-                            Toast.makeText(FavouriteActivity.this, "Nothing To show!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ToWatchActivity.this, "Nothing To show!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -114,36 +113,38 @@ public class FavouriteActivity extends AppCompatActivity {
     private void highlightCurrentRow(View rowView) {
         rowView.setBackgroundColor(Color.GRAY);
     }
-    public void clearMethod(View view){
+    public void addMethod(View view){
+        startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+    }
 
-            if(name == ""){
-                return;
-            }
+    public void removeMethod(View view){
+
+        if(name == ""){
+            return;
+        }
 
 
-            db.collection("UserFavourites").document(user_id).collection("Favourites").document(name)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+        db.collection("UserToWatchList").document(user_id).collection("ToWatch").document(name)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
 
-                            Toast.makeText(FavouriteActivity.this, "deleted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToWatchActivity.this, "deleted!", Toast.LENGTH_SHORT).show();
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(FavouriteActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ToWatchActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
         Intent intent = getIntent();
         finish();
         startActivity(intent);
-        /*if (deleted == MovieNames.size()){
-            Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
-        }*/
+
     }
 }

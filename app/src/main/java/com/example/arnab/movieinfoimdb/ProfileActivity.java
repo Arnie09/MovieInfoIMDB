@@ -72,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
     }
     public void toWatchMethod(View view){
-
+        startActivity(new Intent(getApplicationContext(),ToWatchActivity.class));
     }
     public void favouritesMethod(View view){
         startActivity(new Intent(getApplicationContext(),FavouriteActivity.class));

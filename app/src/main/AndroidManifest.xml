@@ -22,7 +22,8 @@
         <activity android:name=".LogInActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".HistoryActivity" />
-        <activity android:name=".FavouriteActivity"></activity>
+        <activity android:name=".FavouriteActivity" />
+        <activity android:name=".ToWatchActivity"></activity>
     </application>
 
 </manifest>
