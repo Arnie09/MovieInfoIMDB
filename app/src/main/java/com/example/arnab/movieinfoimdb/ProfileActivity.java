@@ -1,5 +1,6 @@
 package com.example.arnab.movieinfoimdb;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -64,6 +65,16 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseAuthenticator.signOut();
         finish();
         startActivity(new Intent(getApplicationContext(),LogInActivity.class));
+
+    }
+    public void historyMethod(View view){
+        //finish();
+        startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
+    }
+    public void toWatchMethod(View view){
+
+    }
+    public void favouritesMethod(View view){
 
     }
 }
