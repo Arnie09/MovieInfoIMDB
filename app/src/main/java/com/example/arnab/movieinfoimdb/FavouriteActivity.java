@@ -114,7 +114,7 @@ public class FavouriteActivity extends AppCompatActivity {
     private void highlightCurrentRow(View rowView) {
         rowView.setBackgroundColor(Color.GRAY);
     }
-    public void clearMethod(View view){
+    public void removeMethod(View view){
 
             if(name == ""){
                 return;

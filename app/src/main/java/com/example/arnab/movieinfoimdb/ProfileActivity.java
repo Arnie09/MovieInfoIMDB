@@ -20,8 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ProfileActivity extends AppCompatActivity {
 
     protected TextView welcomemessage;
-    protected Button log_out;
-    protected Button search_button;
+     Button log_out;
+     Button search_button;
+     Button favourite_button;
+     Button history_button;
+     Button todo_button;
     protected FirebaseAuth firebaseAuthenticator;
 
     @Override
@@ -29,9 +32,17 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        welcomemessage = findViewById(R.id.WelcomeTextView);
-        log_out = findViewById(R.id.LogOutButton);
-        search_button = findViewById(R.id.SearchButton);
+        welcomemessage = findViewById(R.id.Intromessage);
+        log_out = (Button)findViewById(R.id.LogOutButton);
+        search_button = (Button) findViewById(R.id.SearchButton);
+        favourite_button = (Button) findViewById(R.id.FavouritesButton);
+        history_button = (Button) findViewById(R.id.HistoryButton);
+        todo_button = (Button) findViewById(R.id.ToWatchButton);
+        log_out.setVisibility(View.INVISIBLE);
+        search_button.setVisibility(View.INVISIBLE);
+        favourite_button.setVisibility(View.INVISIBLE);
+        history_button.setVisibility(View.INVISIBLE);
+        todo_button.setVisibility(View.INVISIBLE);
         firebaseAuthenticator = FirebaseAuth.getInstance();
 
         final FirebaseUser user = firebaseAuthenticator.getCurrentUser();
@@ -50,14 +61,19 @@ public class ProfileActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
                     String name = documentSnapshot.getString("Name");
-                    welcomemessage.setText("welcome "+name);
+                    welcomemessage.setText("Welcome "+name);
+                    log_out.setVisibility(View.VISIBLE);
+                    search_button.setVisibility(View.VISIBLE);
+                    favourite_button.setVisibility(View.VISIBLE);
+                    history_button.setVisibility(View.VISIBLE);
+                    todo_button.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
     public void searchMethod(View view){
-        finish();
+
         startActivity(new Intent(getApplicationContext(),SearchActivity.class));
     }
     public void logOutMethod(View view){

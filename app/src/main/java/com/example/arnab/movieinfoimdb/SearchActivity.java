@@ -37,14 +37,9 @@ public class SearchActivity extends AppCompatActivity {
     TextView MovieSynopsis;
     TextView MovieDirector;
 
-    TextView MovieNameHeader;
-    TextView MovieRatingHeader;
-    TextView MovieGenreHeader;
-    TextView MovieDirectorHeader;
-    TextView MovieSynopsisHeader;
-    Button backButton;
+    Button favouriteButton;
+    Button todoButton;
     LinearLayout layout_one;
-    LinearLayout layout_two;
 
     String words ="";
     String info = "";
@@ -86,26 +81,18 @@ public class SearchActivity extends AppCompatActivity {
         MovieGenreBox = (TextView) findViewById(R.id.MovieGenreView);
         MovieSynopsis = (TextView) findViewById(R.id.SynopsisView);
         MovieDirector = (TextView) findViewById(R.id.MovieDirectorView);
-        MovieNameHeader = findViewById(R.id.MovieTitle);
-        MovieRatingHeader = findViewById(R.id.RatingTitle);
-        MovieGenreHeader = findViewById(R.id.GenreTitle);
-        MovieDirectorHeader = findViewById(R.id.DirectorTitle);
-        MovieSynopsisHeader = findViewById(R.id.SynopsisTitle);
-        backButton = findViewById(R.id.BackButton);
+        favouriteButton = findViewById(R.id.favouriteButton);
+        todoButton = findViewById(R.id.todoButton);
+        favouriteButton.setVisibility(View.INVISIBLE);
+        todoButton.setVisibility(View.INVISIBLE);
         layout_one = findViewById(R.id.linearLayout);
         layout_one.setVisibility(View.INVISIBLE);
-        layout_two = findViewById(R.id.linearLayout2);
-        layout_two.setVisibility(View.INVISIBLE);
+
 
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         User_ID = user.getUid();
-    }
-
-    public void backButtonFunction(View view){
-        finish();
-        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
     }
 
     public void favouriteFunction(View view){
@@ -154,10 +141,6 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 int length_of_array_list = ListOfUrls.size();
-                for(int i = 0;i < length_of_array_list;i++){
-                    Log.i("The urls of imdb scrapped are : ", ListOfUrls.get(i));
-                }
-
                 if(ListOfUrls.size()>0) {
 
                     String imdbUrl = ListOfUrls.get(0);
@@ -194,17 +177,13 @@ public class SearchActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             layout_one.setVisibility(View.VISIBLE);
-                            layout_two.setVisibility(View.VISIBLE);
-                            MovieNameHeader.setText("NAME :");
-                            MovieRatingHeader.setText("RATING :");
-                            MovieGenreHeader.setText("GENRE :");
-                            MovieDirectorHeader.setText("DIRECTOR :");
-                            MovieSynopsisHeader.setText("SYNOPSIS :");
-                            MovieDirector.setText(director);
-                            MovieNameBox.setText(name);
-                            MovieSynopsis.setText(synopsis);
-                            RatingBox.setText(rating_movie);
-                            MovieGenreBox.setText(Genre);
+                            favouriteButton.setVisibility(View.VISIBLE);
+                            todoButton.setVisibility(View.VISIBLE);
+                            MovieDirector.setText("Director: "+director);
+                            MovieNameBox.setText("Name: "+name);
+                            MovieSynopsis.setText("Synopsis: "+synopsis);
+                            RatingBox.setText("Rating: "+rating_movie);
+                            MovieGenreBox.setText("Genre: "+Genre);
 
                             new AddtoHistory().execute();
                         }
