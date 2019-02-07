@@ -118,7 +118,7 @@ public class SearchActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(SearchActivity.this, "Added to favourites!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, "Added to toWatch!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
