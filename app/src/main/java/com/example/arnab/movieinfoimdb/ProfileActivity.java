@@ -38,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
         favourite_button = (Button) findViewById(R.id.FavouritesButton);
         history_button = (Button) findViewById(R.id.HistoryButton);
         todo_button = (Button) findViewById(R.id.ToWatchButton);
+        welcomemessage.setVisibility(View.INVISIBLE);
         log_out.setVisibility(View.INVISIBLE);
         search_button.setVisibility(View.INVISIBLE);
         favourite_button.setVisibility(View.INVISIBLE);
@@ -62,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if(documentSnapshot.exists()){
                     String name = documentSnapshot.getString("Name");
                     welcomemessage.setText("Welcome "+name);
+                    welcomemessage.setVisibility(View.VISIBLE);
                     log_out.setVisibility(View.VISIBLE);
                     search_button.setVisibility(View.VISIBLE);
                     favourite_button.setVisibility(View.VISIBLE);

@@ -117,6 +117,7 @@ public class FavouriteActivity extends AppCompatActivity {
     public void removeMethod(View view){
 
             if(name == ""){
+                Toast.makeText(FavouriteActivity.this, "Long press any movie to delete it from favourites", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -146,4 +147,5 @@ public class FavouriteActivity extends AppCompatActivity {
             Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
         }*/
     }
+
 }

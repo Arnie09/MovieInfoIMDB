@@ -31,7 +31,7 @@
             android:gravity="bottom|left|center_vertical|center_horizontal|fill_horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="Favourites"
+            android:text="To Watch "
             android:textSize="18sp"
             android:textStyle="bold"
             tools:layout_editor_absoluteY="27dp" />

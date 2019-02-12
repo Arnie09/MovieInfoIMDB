@@ -58,9 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="removeMethod"
-            android:text="Clear All"
+            android:text="Delete"
             tools:layout_editor_absoluteX="245dp"
             tools:layout_editor_absoluteY="64dp" />
+
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

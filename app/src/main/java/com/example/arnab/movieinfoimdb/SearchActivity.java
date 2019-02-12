@@ -193,9 +193,17 @@ public class SearchActivity extends AppCompatActivity {
                 else{
                     Toast.makeText(SearchActivity.this, "The Data you searched for was not a movie or Tv Series!", Toast.LENGTH_SHORT).show();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SearchActivity.this, "Sorry doesnot exist!", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
                 e.printStackTrace();
             }
+
             return null;
         }
         @Override
