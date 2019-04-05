@@ -2,7 +2,12 @@ package com.example.arnab.movieinfoimdb;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-        import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jsoup.Jsoup;
@@ -31,7 +37,7 @@ import java.util.concurrent.ExecutionException;
         import java.util.regex.Matcher;
         import java.util.regex.Pattern;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     String url ="";
     TextView searchContent;
@@ -59,6 +65,8 @@ public class SearchActivity extends AppCompatActivity {
     String User_ID;
     Map<String,Object> movie_data = new HashMap<>();
 
+    String User_name = "";
+
     public void searchFunction(View view) throws ExecutionException, InterruptedException {
         searchContent = findViewById(R.id.InputBox);
         String search = searchContent.getText().toString();
@@ -80,7 +88,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         RatingBox = (TextView)findViewById(R.id.MovieRatingView);
@@ -100,6 +108,27 @@ public class SearchActivity extends AppCompatActivity {
         user = firebaseauthenticator.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         User_ID = user.getUid();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        db.collection("UserDatabase").document(User_ID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot.exists()){
+                            User_name = documentSnapshot.getString("Name");
+                            Log.i("SearchActivity :",User_name);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -121,6 +150,8 @@ public class SearchActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     public void favouriteFunction(View view){
         if(movie_data.isEmpty()){
@@ -149,6 +180,19 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if (id == R.id.favourites) {
+            //open favourites aactivity!
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public class GoogleSearch extends AsyncTask<Void, Void, Void> {
