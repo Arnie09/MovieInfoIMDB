@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -76,6 +80,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         RatingBox = (TextView)findViewById(R.id.MovieRatingView);
         MovieNameBox = (TextView) findViewById(R.id.MovieNameView);
         MovieGenreBox = (TextView) findViewById(R.id.MovieGenreView);
@@ -93,6 +100,26 @@ public class SearchActivity extends AppCompatActivity {
         user = firebaseauthenticator.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         User_ID = user.getUid();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void favouriteFunction(View view){
