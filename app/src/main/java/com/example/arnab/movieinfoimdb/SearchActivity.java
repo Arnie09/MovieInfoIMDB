@@ -103,7 +103,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         layout_one = findViewById(R.id.linearLayout);
         layout_one.setVisibility(View.INVISIBLE);
 
-
+        final TextView user_name_to_show = findViewById(R.id.userName);
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -125,6 +125,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
                             User_name = documentSnapshot.getString("Name");
+                            //user_name_to_show.setText(User_name);
                             Log.i("SearchActivity :",User_name);
                         }
                     }
@@ -188,6 +189,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         if (id == R.id.favourites) {
             //open favourites aactivity!
+            startActivity(new Intent(getApplicationContext(),FavouriteActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
