@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,6 +55,9 @@ public class FavouriteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.getBackground().setAlpha(225);
         setSupportActionBar(toolbar);
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        toolbar_title.setText("Favourites");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
@@ -116,41 +122,60 @@ public class FavouriteActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.del_button) {
+            if(name == ""){
+                Toast.makeText(FavouriteActivity.this, "Long press any movie to delete it from favourites", Toast.LENGTH_SHORT).show();
+                ;
+            }
+            else {
+
+
+                db.collection("UserFavourites").document(user_id).collection("Favourites").document(name)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                Toast.makeText(FavouriteActivity.this, "deleted!", Toast.LENGTH_SHORT).show();
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(FavouriteActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                return true;
+            }
+        }
+        else if(id == R.id.exit){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void highlightCurrentRow(View rowView) {
         rowView.setBackgroundColor(Color.GRAY);
     }
-    public void removeMethod(View view){
-
-            if(name == ""){
-                Toast.makeText(FavouriteActivity.this, "Long press any movie to delete it from favourites", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-            db.collection("UserFavourites").document(user_id).collection("Favourites").document(name)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            Toast.makeText(FavouriteActivity.this, "deleted!", Toast.LENGTH_SHORT).show();
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(FavouriteActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-        /*if (deleted == MovieNames.size()){
-            Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
 }
