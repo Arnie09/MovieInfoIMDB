@@ -1,5 +1,7 @@
 package com.example.arnab.movieinfoimdb;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -103,7 +106,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         layout_one = findViewById(R.id.linearLayout);
         layout_one.setVisibility(View.INVISIBLE);
 
-        final TextView user_name_to_show = findViewById(R.id.userName);
+        //final TextView user_name_to_show = findViewById(R.id.userName);
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -116,6 +119,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getBackground().setAlpha(250);
         navigationView.setNavigationItemSelectedListener(this);
 
         db.collection("UserDatabase").document(User_ID)
@@ -125,7 +129,10 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
                             User_name = documentSnapshot.getString("Name");
-                            //user_name_to_show.setText(User_name);
+                            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View vi = inflater.inflate(R.layout.nav_header_main,null);
+                            TextView tv = findViewById(R.id.userName);
+                            tv.setText("Welcome "+User_name);
                             Log.i("SearchActivity :",User_name);
                         }
                     }

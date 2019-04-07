@@ -25,6 +25,7 @@
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#000000"
         android:paddingTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
