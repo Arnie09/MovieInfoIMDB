@@ -31,7 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jsoup.Jsoup;
         import org.jsoup.select.Elements;
-        
+
         import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

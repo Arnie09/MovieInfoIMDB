@@ -8,7 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -51,6 +55,14 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        //setting up the toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.getBackground().setAlpha(225);
+        setSupportActionBar(toolbar);
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        toolbar_title.setText("History");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();
@@ -98,41 +110,53 @@ public class HistoryActivity extends AppCompatActivity {
                     }
 
                 });
-
-
-
-
-
     }
-    public void clearMethod(View view){
-        int count = 0;
-        final int deleted = 0;
-        while (MovieNames.size()>count) {
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.del_button) {
+            int count = 0;
+            final int deleted = 0;
+            while (MovieNames.size()>count) {
 
 
-            db.collection("UserHistory").document(user_id).collection("History").document(MovieNames.get(count))
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+                db.collection("UserHistory").document(user_id).collection("History").document(MovieNames.get(count))
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
 
-                            Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(HistoryActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            count++;
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(HistoryActivity.this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                count++;
+            }
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            }
+        else if(id == R.id.exit){
+            finish();
+            return true;
         }
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-        /*if (deleted == MovieNames.size()){
-            Toast.makeText(HistoryActivity.this, "History deleted!", Toast.LENGTH_SHORT).show();
-        }*/
+        return super.onOptionsItemSelected(item);
     }
 }
