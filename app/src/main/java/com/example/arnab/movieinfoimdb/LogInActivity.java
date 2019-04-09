@@ -65,7 +65,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         progressDialog = new ProgressDialog(this);
         if(firebaseAuthenticator.getCurrentUser()!=null && firebaseAuthenticator.getCurrentUser().isEmailVerified()== true){
             finish();
-            startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(),SearchActivity.class));
         }
     }
 
@@ -110,7 +110,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             firebaseAuthenticator.getCurrentUser().reload();
                             if(firebaseAuthenticator.getCurrentUser().isEmailVerified()) {
                                 finish();
-                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                             }
                             else{
                                 Toast.makeText(LogInActivity.this, "Please check email and verify sign up!", Toast.LENGTH_LONG).show();

@@ -156,6 +156,11 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             finish();
             return true;
         }
+        else if(id == R.id.logout){
+            firebaseauthenticator.signOut();
+            finish();
+            startActivity(new Intent(getApplicationContext(),LogInActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -197,6 +202,14 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         if (id == R.id.favourites) {
             //open favourites aactivity!
             startActivity(new Intent(getApplicationContext(),FavouriteActivity.class));
+        }
+        else if(id == R.id.History){
+            //open history activity
+            startActivity((new Intent(getApplicationContext(),HistoryActivity.class)));
+        }
+        else if(id == R.id.ToWatch){
+            //open history activity
+            startActivity((new Intent(getApplicationContext(),ToWatchActivity.class)));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -10,5 +10,14 @@
             android:id="@+id/favourites"
             android:icon="@drawable/ic_favorite_black_24dp"
             android:title="Favourites" />
+
+        <item
+            android:id="@+id/History"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="History" />
+        <item
+            android:id="@+id/ToWatch"
+            android:icon="@drawable/ic_check"
+            android:title="To Watch" />
     </group>
 </menu>
