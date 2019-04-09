@@ -200,14 +200,17 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         if (id == R.id.favourites) {
             //open favourites aactivity!
+            finish();
             startActivity(new Intent(getApplicationContext(),FavouriteActivity.class));
         }
         else if(id == R.id.History){
             //open history activity
+            finish();
             startActivity((new Intent(getApplicationContext(),HistoryActivity.class)));
         }
         else if(id == R.id.ToWatch){
             //open history activity
+            finish();
             startActivity((new Intent(getApplicationContext(),ToWatchActivity.class)));
         }
 
