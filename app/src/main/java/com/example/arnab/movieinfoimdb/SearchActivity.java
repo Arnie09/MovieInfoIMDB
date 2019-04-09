@@ -1,6 +1,6 @@
 package com.example.arnab.movieinfoimdb;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,8 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jsoup.Jsoup;
         import org.jsoup.select.Elements;
-
-        import java.io.IOException;
+        
         import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
