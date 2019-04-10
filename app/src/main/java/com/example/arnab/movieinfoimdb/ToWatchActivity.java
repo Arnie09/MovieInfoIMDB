@@ -59,6 +59,7 @@ public class ToWatchActivity extends AppCompatActivity {
         TextView toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_title.setText("To-Watch");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseauthenticator = FirebaseAuth.getInstance();
         user = firebaseauthenticator.getCurrentUser();

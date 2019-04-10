@@ -20,9 +20,12 @@
         </activity>
         <activity android:name=".LogInActivity" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".HistoryActivity" />
-        <activity android:name=".FavouriteActivity" />
-        <activity android:name=".ToWatchActivity"></activity>
+        <activity android:name=".HistoryActivity"
+            android:parentActivityName=".SearchActivity"/>
+        <activity android:name=".FavouriteActivity"
+            android:parentActivityName=".SearchActivity"/>
+        <activity android:name=".ToWatchActivity"
+            android:parentActivityName=".SearchActivity"></activity>
     </application>
 
 </manifest>
