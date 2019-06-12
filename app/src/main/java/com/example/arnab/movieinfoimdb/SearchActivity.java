@@ -288,7 +288,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                 else{
                     Toast.makeText(SearchActivity.this, "The Data you searched for was not a movie or Tv Series!", Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
